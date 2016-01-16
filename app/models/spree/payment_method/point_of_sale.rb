@@ -2,7 +2,7 @@ module Spree
   class PaymentMethod::PointOfSale < PaymentMethod
     
     def actions
-      %w{capture void}
+      %i{capture void}
     end
 
     # Indicates whether its possible to capture the payment
@@ -18,10 +18,7 @@ module Spree
     def capture(*args)
       ActiveMerchant::Billing::Response.new(true, "", {}, {})
     end
-
-    def void(*args)
-      ActiveMerchant::Billing::Response.new(true, "", {}, {})
-    end
+    alias_method :void, :capture
 
     def source_required?
       false
