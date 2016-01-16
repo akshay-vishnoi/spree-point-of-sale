@@ -15,16 +15,17 @@ Gem::Specification.new do |s|
   s.files     = `git ls-files`.split("\n")
 
   s.require_path = ["lib"]
-  s.required_ruby_version = ">= 1.9.3"
+  ## TODO - fix the ruby version.
+  s.required_ruby_version = ">=2.1.1"
 
   s.requirements << "none"
-  s.rubygems_version = "2.0.3"
+  s.rubygems_version = "2.2.2"
 
   s.summary = "Point of sale screen for Spree"
   s.description = "Extend functionality for spree to give shop like ordering ability through admin end"
 
 
-  s.add_dependency('spree_core', '~> 2.2.0')
+  s.add_dependency('spree_core', '~> 3.0.4')
   s.add_dependency('barby', '>= 0')
   s.add_dependency('prawn', '>=0')
   s.add_dependency('chunky_png', '>=0')

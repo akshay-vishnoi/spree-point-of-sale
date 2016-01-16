@@ -16,6 +16,8 @@ require 'database_cleaner'
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 # ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
+FactoryGirl.definition_file_paths = %w(spec/factories)
+FactoryGirl.find_definitions
 
 RSpec.configure do |config|
   # ## Mock Framework
@@ -43,25 +45,35 @@ RSpec.configure do |config|
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  config.order = "random"
+  # config.order = "random"
+  config.color = true
+  config.formatter = :documentation
   config.include Spree::Core::Engine.routes.url_helpers
+
   config.before :suite do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.before type: :request do
-    DatabaseCleaner.strategy = :truncation
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
   end
 
-  config.before :each do
-    # Before each spec check if it is a Javascript test and switch between using database transactions or not where necessary.
-    DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
-    DatabaseCleaner.start
-  end
+  ## TODO - remove.
+  # config.before type: :request do
+  #   DatabaseCleaner.strategy = :truncation
+  # end
 
-  # After each spec clean the database.
-  config.after :each do
-    DatabaseCleaner.clean
-  end
+  # config.before :each do
+  #   # Before each spec check if it is a Javascript test and switch between using database transactions or not where necessary.
+  #   DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
+  #   DatabaseCleaner.start
+  # end
+
+  # # After each spec clean the database.
+  # config.after :each do
+  #   DatabaseCleaner.clean
+  # end
 end
